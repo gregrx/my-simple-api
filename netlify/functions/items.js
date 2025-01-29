@@ -92,7 +92,7 @@ exports.handler = async (event) => {
         } else {
           return {
             statusCode: 404,
-            body: JSON.stringify({'item not found'}),
+            body: JSON.stringify({error:'item not found'}),
           };
         }
       }
@@ -111,7 +111,7 @@ exports.handler = async (event) => {
         } else {
           return {
             statusCode: 404,
-            body: JSON.stringify({'item not found'}),
+            body: JSON.stringify({error:'item not found'}),
           };
         }
       }
