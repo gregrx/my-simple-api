@@ -17,6 +17,38 @@ app.get('/items', (req, res) => {
     res.json(items);
 });
 
+// GET request for addition
+app.get('/add', (req, res) => {
+    const { a, b } = req.query;
+    const sum = parseFloat(a) + parseFloat(b);
+    res.json({ result: sum });
+});
+
+// GET request for subtraction
+app.get('/subtract', (req, res) => {
+    const { a, b } = req.query;
+    const difference = parseFloat(a) - parseFloat(b);
+    res.json({ result: difference });
+});
+
+// GET request for multiplication
+app.get('/multiply', (req, res) => {
+    const { a, b } = req.query;
+    const product = parseFloat(a) * parseFloat(b);
+    res.json({ result: product });
+});
+
+// GET request for division
+app.get('/divide', (req, res) => {
+    const { a, b } = req.query;
+    if (parseFloat(b) === 0) {
+        res.status(400).json({ error: 'Division by zero is not allowed' });
+    } else {
+        const quotient = parseFloat(a) / parseFloat(b);
+        res.json({ result: quotient });
+    }
+});
+
 // POST request to add a new item
 app.post('/items', (req, res) => {
     const newItem = {
