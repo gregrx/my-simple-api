@@ -1,0 +1,59 @@
+// netlify/functions/items.js
+const items = [
+    { id: 1, name: 'Item 1' },
+    { id: 2, name: 'Item 2' }
+  ];
+  
+  exports.handler = async (event) => {
+    switch (event.httpMethod) {
+      case 'GET':
+        return {
+          statusCode: 200,
+          body: JSON.stringify(items),
+        };
+      case 'POST':
+        const newItem = JSON.parse(event.body);
+        newItem.id = items.length + 1;
+        items.push(newItem);
+        return {
+          statusCode: 201,
+          body: JSON.stringify(newItem),
+        };
+      case 'PUT':
+        const idToUpdate = parseInt(event.queryStringParameters.id, 10);
+        const itemToUpdate = items.find(item => item.id === idToUpdate);
+        if (itemToUpdate) {
+          const updatedItem = JSON.parse(event.body);
+          itemToUpdate.name = updatedItem.name;
+          return {
+            statusCode: 200,
+            body: JSON.stringify(itemToUpdate),
+          };
+        } else {
+          return {
+            statusCode: 404,
+            body: 'Item not found',
+          };
+        }
+      case 'DELETE':
+        const idToDelete = parseInt(event.queryStringParameters.id, 10);
+        const indexToDelete = items.findIndex(item => item.id === idToDelete);
+        if (indexToDelete !== -1) {
+          items.splice(indexToDelete, 1);
+          return {
+            statusCode: 204,
+            body: '',
+          };
+        } else {
+          return {
+            statusCode: 404,
+            body: 'Item not found',
+          };
+        }
+      default:
+        return {
+          statusCode: 405,
+          body: 'Method Not Allowed',
+        };
+    }
+  };
