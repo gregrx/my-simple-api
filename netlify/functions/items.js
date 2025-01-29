@@ -73,7 +73,7 @@ exports.handler = async (event) => {
         items.push(newItem);
         return {
           statusCode: 201,
-          body: JSON.stringify(newItem),
+          body: JSON.stringify({newItem}),
         };
       }
       break;
@@ -87,12 +87,12 @@ exports.handler = async (event) => {
           itemToUpdate.name = updatedItem.name;
           return {
             statusCode: 200,
-            body: JSON.stringify(itemToUpdate),
+            body: JSON.stringify({itemToUpdate}),
           };
         } else {
           return {
             statusCode: 404,
-            body: 'Item not found',
+            body: JSON.stringify({'item not found'}),
           };
         }
       }
@@ -111,7 +111,7 @@ exports.handler = async (event) => {
         } else {
           return {
             statusCode: 404,
-            body: 'Item not found',
+            body: JSON.stringify({'item not found'}),
           };
         }
       }
