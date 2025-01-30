@@ -4,66 +4,72 @@ const items = [
   { id: 2, name: 'Item 2' }
 ];
 
+// Helper function to get item by ID
+function getItemById(id) {
+    return items.find(item => item.id === id);
+}
+
+// Function to parse numbers or item IDs
+function parseNumberOrItemId(value) {
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+        return parsedValue;
+    }
+    const item = getItemById(parseInt(value, 10));
+    return item ? parseFloat(item.name) : null;
+}
+
 exports.handler = async (event) => {
   const { httpMethod, path, queryStringParameters, body } = event;
-  const { a, b, id } = queryStringParameters || {};
+  const { operation, a, b, id } = queryStringParameters || {};
 
   switch (httpMethod) {
     case 'GET':
-      switch (path) {
-        case '/.netlify/functions/items':
+      if (path === '/.netlify/functions/items') {
+        const numA = parseNumberOrItemId(a);
+        const numB = parseNumberOrItemId(b);
+
+        if (numA === null || numB === null) {
           return {
-            statusCode: 200,
-            body: JSON.stringify(items),
+            statusCode: 400,
+            body: JSON.stringify({ error: 'Invalid input or item not found' }),
           };
-        case '/.netlify/functions/items/add':
-          if (a && b) {
-            const sum = parseFloat(a) + parseFloat(b);
-            return {
-              statusCode: 200,
-              body: JSON.stringify({ result: sum }),
-            };
-          }
-          break;
-        case '/.netlify/functions/items/subtract':
-          if (a && b) {
-            const difference = parseFloat(a) - parseFloat(b);
-            return {
-              statusCode: 200,
-              body: JSON.stringify({ result: difference }),
-            };
-          }
-          break;
-        case '/.netlify/functions/items/multiply':
-          if (a && b) {
-            const product = parseFloat(a) * parseFloat(b);
-            return {
-              statusCode: 200,
-              body: JSON.stringify({ result: product }),
-            };
-          }
-          break;
-        case '/.netlify/functions/items/divide':
-          if (a && b) {
-            if (parseFloat(b) === 0) {
+        }
+
+        let result;
+        switch (operation) {
+          case 'add':
+            result = numA + numB;
+            break;
+          case 'subtract':
+            result = numA - numB;
+            break;
+          case 'multiply':
+            result = numA * numB;
+            break;
+          case 'divide':
+            if (numB === 0) {
               return {
                 statusCode: 400,
                 body: JSON.stringify({ error: 'Division by zero is not allowed' }),
               };
             }
-            const quotient = parseFloat(a) / parseFloat(b);
+            result = numA / numB;
+            break;
+          default:
             return {
-              statusCode: 200,
-              body: JSON.stringify({ result: quotient }),
+              statusCode: 400,
+              body: JSON.stringify({ error: 'Invalid operation' }),
             };
-          }
-          break;
-        default:
-          return {
-            statusCode: 404,
-            body: 'Not Found',
-          };
+        }
+
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ result }),
+        };
       }
+      // Existing GET logic for other paths
+      // ... existing code ...
       break;
 
     case 'POST':
@@ -73,7 +79,7 @@ exports.handler = async (event) => {
         items.push(newItem);
         return {
           statusCode: 201,
-          body: JSON.stringify({newItem}),
+          body: JSON.stringify({ newItem }),
         };
       }
       break;
@@ -87,12 +93,12 @@ exports.handler = async (event) => {
           itemToUpdate.name = updatedItem.name;
           return {
             statusCode: 200,
-            body: JSON.stringify({itemToUpdate}),
+            body: JSON.stringify({ itemToUpdate }),
           };
         } else {
           return {
             statusCode: 404,
-            body: JSON.stringify({error:'item not found'}),
+            body: JSON.stringify({ error: 'item not found' }),
           };
         }
       }
@@ -111,7 +117,7 @@ exports.handler = async (event) => {
         } else {
           return {
             statusCode: 404,
-            body: JSON.stringify({error:'item not found'}),
+            body: JSON.stringify({ error: 'item not found' }),
           };
         }
       }

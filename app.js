@@ -13,40 +13,53 @@ let items = [
 ];
 
 // GET request to fetch all items
-app.get('/items', (req, res) => {
-    res.json(items);
-});
+// Helper function to get item by ID
+function getItemById(id) {
+    return items.find(item => item.id === id);
+}
 
-// GET request for addition
-app.get('/add', (req, res) => {
-    const { a, b } = req.query;
-    const sum = parseFloat(a) + parseFloat(b);
-    res.json({ result: sum });
-});
-
-// GET request for subtraction
-app.get('/subtract', (req, res) => {
-    const { a, b } = req.query;
-    const difference = parseFloat(a) - parseFloat(b);
-    res.json({ result: difference });
-});
-
-// GET request for multiplication
-app.get('/multiply', (req, res) => {
-    const { a, b } = req.query;
-    const product = parseFloat(a) * parseFloat(b);
-    res.json({ result: product });
-});
-
-// GET request for division
-app.get('/divide', (req, res) => {
-    const { a, b } = req.query;
-    if (parseFloat(b) === 0) {
-        res.status(400).json({ error: 'Division by zero is not allowed' });
-    } else {
-        const quotient = parseFloat(a) / parseFloat(b);
-        res.json({ result: quotient });
+// Function to parse numbers or item IDs
+function parseNumberOrItemId(value) {
+    const parsedValue = parseFloat(value);
+    if (!isNaN(parsedValue)) {
+        return parsedValue;
     }
+    const item = getItemById(parseInt(value, 10));
+    return item ? parseFloat(item.name) : null;
+}
+
+// Main endpoint for math operations
+app.get('/items', (req, res) => {
+    const { operation, a, b } = req.query;
+    const numA = parseNumberOrItemId(a);
+    const numB = parseNumberOrItemId(b);
+
+    if (numA === null || numB === null) {
+        return res.status(400).json({ error: 'Invalid input or item not found' });
+    }
+
+    let result;
+    switch (operation) {
+        case 'add':
+            result = numA + numB;
+            break;
+        case 'substract':
+            result = numA - numB;
+            break;
+        case 'multiply':
+            result = numA * numB;
+            break;
+        case 'divide':
+            if (numB === 0) {
+                return res.status(400).json({ error: 'Division by zero is not allowed' });
+            }
+            result = numA / numB;
+            break;
+        default:
+            return res.status(400).json({ error: 'Invalid operation' });
+    }
+
+    res.json({ result });
 });
 
 // POST request to add a new item
