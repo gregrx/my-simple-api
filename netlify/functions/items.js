@@ -41,7 +41,7 @@ exports.handler = async (event) => {
           case 'add':
             result = numA + numB;
             break;
-          case 'subtract':
+          case 'substract':
             result = numA - numB;
             break;
           case 'multiply':
@@ -68,8 +68,6 @@ exports.handler = async (event) => {
           body: JSON.stringify({ result }),
         };
       }
-      // Existing GET logic for other paths
-      // ... existing code ...
       break;
 
     case 'POST':
