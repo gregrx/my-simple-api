@@ -22,16 +22,16 @@ request:
 
 **Addition**: 
 
-    curl "https://test-simple-api.netlify.app/.netlify/functions/items&operation=add?a=5&b=3"
+    curl "https://test-simple-api.netlify.app/.netlify/functions/items/add?a=5&b=3"
 
 **Subtraction**: 
 
-    curl "https://test-simple-api.netlify.app/.netlify/functions/items&operation=subtract?a=5&b=3"
+    curl "https://test-simple-api.netlify.app/.netlify/functions/items/subtract?a=5&b=3"
 
 **Multiplication**: 
 
-    curl "https://test-simple-api.netlify.app/.netlify/functions/items&operation=multiply?a=5&b=3"
+    curl "https://test-simple-api.netlify.app/.netlify/functions/items/multiply?a=5&b=3"
 
 **Division**: 
 
-    curl "https://test-simple-api.netlify.app/.netlify/functions/items&operation=divide?a=5&b=3"
+    curl "https://test-simple-api.netlify.app/.netlify/functions/items/divide?a=5&b=3"
