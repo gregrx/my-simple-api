@@ -55,7 +55,7 @@
         "parentId": "fld_1",
         "modified": 0,
         "created": 0,
-        "url": "https://test-simple-api.netlify.app/.netlify/functions/items/subtract?a=5&b=3",
+        "url": "https://test-simple-api.netlify.app/.netlify/functions/items/substract?a=5&b=3",
         "name": "Subtract Numbers",
         "description": "",
         "method": "GET",

@@ -24,9 +24,9 @@ request:
 
     curl "https://test-simple-api.netlify.app/.netlify/functions/items/add?a=5&b=3"
 
-**Subtraction**: 
+**Substraction**: 
 
-    curl "https://test-simple-api.netlify.app/.netlify/functions/items/subtract?a=5&b=3"
+    curl "https://test-simple-api.netlify.app/.netlify/functions/items/substract?a=5&b=3"
 
 **Multiplication**: 
 
